@@ -349,6 +349,15 @@ def train(hyp, opt, device, tb_writer=None):
                     torch.save(ckpt, best)
                 del ckpt
         # end epoch ----------------------------------------------------------------------------------------------------
+        
+        #-- save the trained model
+        shutil.rmtree(float_model, ignore_errors=True)
+        os.makedirs(float_model)
+        save_path = os.path.join(float_model, 'f_model.pth')
+        torch.save(model.state_dict(), save_path)
+        print('[MAX] Trained model written to', save_path)
+        #return
+        
     # end training
 
     if rank in [-1, 0]:
