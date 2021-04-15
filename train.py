@@ -5,6 +5,8 @@ import random
 import time
 from pathlib import Path
 
+import shutil
+
 import numpy as np
 import torch.distributed as dist
 import torch.nn.functional as F
