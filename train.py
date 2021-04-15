@@ -30,7 +30,7 @@ from utils.google_utils import attempt_download
 from utils.torch_utils import init_seeds, ModelEMA, select_device, intersect_dicts
 
 
-def train(hyp, opt, device, tb_writer=None):
+def train(hyp, opt, device, tb_writer=None, float_model):
     print(f'Hyperparameters {hyp}')
     log_dir = Path(tb_writer.log_dir) if tb_writer else Path(opt.logdir) / 'evolve'  # logging directory
     wdir = str(log_dir / 'weights') + os.sep  # weights directory
@@ -353,9 +353,9 @@ def train(hyp, opt, device, tb_writer=None):
         # end epoch ----------------------------------------------------------------------------------------------------
         
         #-- save the trained model
-        shutil.rmtree(float_model, ignore_errors=True)
-        os.makedirs(float_model)
-        save_path = os.path.join(float_model, 'f_model.pth')
+        shutil.rmtree(opt.float_model, ignore_errors=True)
+        os.makedirs(opt.float_model)
+        save_path = os.path.join(opt.float_model, 'f_model.pth')
         torch.save(model.state_dict(), save_path)
         print('[MAX] Trained model written to', save_path)
         #return
@@ -408,6 +408,7 @@ if __name__ == '__main__':
     parser.add_argument('--sync-bn', action='store_true', help='use SyncBatchNorm, only available in DDP mode')
     parser.add_argument('--local_rank', type=int, default=-1, help='DDP parameter, do not modify')
     parser.add_argument('--logdir', type=str, default='runs/', help='logging directory')
+    parser.add_argument('-m', '--float_model', type=str,  default='float_model', help='Path to folder where trained model is saved. Default is float_model')
     opt = parser.parse_args()
 
     # Resume
