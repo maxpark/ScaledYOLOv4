@@ -30,7 +30,7 @@ from utils.google_utils import attempt_download
 from utils.torch_utils import init_seeds, ModelEMA, select_device, intersect_dicts
 
 
-def train(hyp, opt, device, tb_writer=None, float_model):
+def train(hyp, opt, device, tb_writer=None):
     print(f'Hyperparameters {hyp}')
     log_dir = Path(tb_writer.log_dir) if tb_writer else Path(opt.logdir) / 'evolve'  # logging directory
     wdir = str(log_dir / 'weights') + os.sep  # weights directory
